@@ -31,11 +31,6 @@ The application uses PostgreSQL and RabbitMQ services deployed via Docker, and c
 
 
 4. Start the application:
-  * Windows:
-    ```
-    start_docker_compose.bat
-    ```
-  * Linux/Mac:
     ```
     docker-compose up -d
     ```
