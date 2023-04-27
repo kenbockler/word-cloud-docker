@@ -8,9 +8,9 @@ The application uses PostgreSQL and RabbitMQ services deployed via Docker, and c
 
 * **PostgreSQL**: Database service for storing word occurrence statistics.
 * **RabbitMQ**: Message queue service for transferring messages from Core to Worker.
-* **Core**: Spring Boot-based microservice providing REST/JSON API for Frontend, and communicates with RabbitMQ and PostgreSQL.
-* **Worker**: Spring Boot-based microservice for processing text file content, counting word occurrences, and storing statistics in the database.
-* **Frontend**: React.js-based user interface for uploading text files and displaying word clouds.
+* **Core**: Spring Boot-based microservice providing REST/JSON API for Frontend, and communicates with RabbitMQ and PostgreSQL. GitHub repository: https://github.com/kenbockler/word-cloud-core
+* **Worker**: Spring Boot-based microservice for processing text file content, counting word occurrences, and storing statistics in the database. GitHub repository: https://github.com/kenbockler/word-cloud-worker
+* **Frontend**: React.js-based user interface for uploading text files and displaying word clouds. GitHub repository: https://github.com/kenbockler/word-cloud-frontend
 
 ## Installation
 
@@ -27,6 +27,7 @@ The application uses PostgreSQL and RabbitMQ services deployed via Docker, and c
     ```
     cd word-cloud-docker
     ```
+
 
 
 4. Start the application:
