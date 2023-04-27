@@ -1,0 +1,87 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:15.2
+    container_name: postgres-container
+    environment:
+      POSTGRES_USER: wordclouduser
+      POSTGRES_PASSWORD: wordcloudpass
+      POSTGRES_DB: wordcloud
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "5432:5432"
+    restart: always
+    networks:
+      - network
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq-container
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_ERLANG_COOKIE: "a_secure_cookie_value"
+      RABBITMQ_DEFAULT_USER: wordclouduser
+      RABBITMQ_DEFAULT_PASS: wordcloudpass
+      RABBITMQ_DEFAULT_VHOST: wordcloudhost
+    networks:
+      - network
+    restart: always
+    volumes:
+      - ./rabbitmq-data:/var/lib/rabbitmq
+
+  core:
+    image: estken/word-cloud-core:latest
+    container_name: word-cloud-core
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USERNAME: wordclouduser
+      DB_PASSWORD: wordcloudpass
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: 5672
+      RABBITMQ_USERNAME: wordclouduser
+      RABBITMQ_PASSWORD: wordcloudpass
+    ports:
+      - "8080:8080"
+    restart: always
+    networks:
+      - network
+
+  worker:
+    image: estken/word-cloud-worker:latest
+    container_name: word-cloud-worker
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USERNAME: wordclouduser
+      DB_PASSWORD: wordcloudpass
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: 5672
+      RABBITMQ_USERNAME: wordclouduser
+      RABBITMQ_PASSWORD: wordcloudpass
+    ports:
+      - "8081:8081"
+    restart: always
+    networks:
+      - network
+
+  frontend:
+    image: estken/word-cloud-frontend:latest
+    container_name: word-cloud-frontend
+    ports:
+      - "80:80"
+    restart: always
+    networks:
+      - network
+
+volumes:
+  postgres-data:
+  rabbitmq-data:
+
+networks:
+  network:
